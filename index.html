@@ -102,52 +102,6 @@
       z-index: -1;
     }
 
-    .flowers {
-      position: absolute;
-      top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      opacity: 0;
-      transition: opacity 1s ease;
-      max-width: 100%;
-      z-index: 0;
-    }
-
-    .flowers.show {
-      opacity: 1;
-    }
-
-    .flower {
-      position: relative;
-      width: 30px;
-      height: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .flower .petal {
-      width: 24px;
-      height: 24px;
-      background-color: pink;
-      border-radius: 50% 50% 0 0;
-      margin-bottom: 2px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-
-    .flower.yellow .petal { background-color: #f4e664; }
-    .flower.blue .petal { background-color: #ace7ef; }
-
-    .flower .stem {
-      width: 4px;
-      height: 30px;
-      background: green;
-      border-radius: 2px;
-    }
-
     .letter {
       position: absolute;
       width: 180px;
@@ -217,16 +171,7 @@
 
 <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
   <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
-  <div class="envelope" id="envelope">
-    <div class="flowers" id="flowers">
-      <div class="flower"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower yellow"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower blue"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower yellow"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower blue"><div class="petal"></div><div class="stem"></div></div>
-    </div>
-  </div>
+  <div class="envelope" id="envelope"> </div>
 </div>
 
 <div class="message" id="message"></div>
@@ -269,35 +214,37 @@ function Changed(button) {
 
 function openEnvelope() {
     if (!envelopeOpened) {
-        // Show visuals
-        document.getElementById("flowers").classList.add("show");
         document.getElementById("letter").classList.add("show");
         document.getElementById("envelope").classList.add("open-flap");
 
         const video = document.getElementById("loopVideo");
         const body = document.body;
 
- 
+        // Show the video and unmute it
         video.style.display = "block";
         video.style.opacity = "1";
-        video.muted = false; 
-        video.volume = 0.8;
-        video.currentTime = 0;
+        
+        // This is a new block to handle unmuting and playing
+        const unmuteAndPlay = () => {
+            video.muted = false; // Unmute the video
+            video.volume = 0.8;
+            video.currentTime = 0;
+            const playPromise = video.play();
 
-        const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    body.style.backgroundColor = "transparent";
+                    console.log("Video started playing.");
+                }).catch(error => {
+                    console.error("Video play failed:", error);
+                    body.style.backgroundColor = "white"; 
+                });
+            }
+        };
 
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-
-                body.style.backgroundColor = "transparent";
-                console.log("Video started playing.");
-            }).catch(error => {
-                console.error("Video play failed:", error);
-                body.style.backgroundColor = "white"; 
-                
-            });
-        }
-
+        // Try to play immediately
+        unmuteAndPlay();
+        
         envelopeOpened = true;
     }
 }
