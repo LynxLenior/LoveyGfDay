@@ -208,7 +208,7 @@
 <body>
 
 <!-- Background Video -->
-<video id="loopVideo" autoplay loop muted playsinline>
+<video id="loopVideo" loop>
   <source src="Capy.mp4" type="video/mp4" />
 </video>
 
@@ -274,48 +274,26 @@ function Changed(button) {
 
 function openEnvelope() {
   if (!envelopeOpened) {
+    // Show UI elements
     document.getElementById("flowers").classList.add("show");
     document.getElementById("letter").classList.add("show");
     document.getElementById("envelope").classList.add("open-flap");
 
+    // Set background transparent so video can show through
     document.body.style.backgroundColor = "transparent";
 
+    // Show and play video background
     const video = document.getElementById("loopVideo");
-    video.classList.add("show");
-
-    try {
-      video.play();
-    } catch (e) {
+    video.classList.add("show");         // Ensure CSS makes it visible (e.g., via opacity or display)
+    video.muted = false;                 // Unmute if you want audio
+    video.loop = true;                   // Ensure it loops
+    video.currentTime = 0;               // Restart from beginning
+    video.play().catch(e => {
       console.error("Autoplay failed:", e);
-    }
-
-    const bgMusic = document.getElementById("bgMusic");
-    if (bgMusic) {
-      bgMusic.volume = 0.4;
-      bgMusic.play().catch(() => {});
-    }
+    });
 
     envelopeOpened = true;
   }
-}
-
-function revealMessage(e) {
-  e.stopPropagation();
-  const letter = document.getElementById("letter");
-
-  if (!letterZoomed) {
-    letter.classList.add("zoom");
-    setTimeout(() => {
-      document.getElementById("message").classList.add("show");
-    }, 600);
-    letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
-  } else {
-    letter.classList.remove("zoom");
-    document.getElementById("message").classList.remove("show");
-    letter.innerHTML = "Click to reveal message";
-  }
-
-  letterZoomed = !letterZoomed;
 }
 </script>
 
