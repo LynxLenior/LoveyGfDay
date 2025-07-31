@@ -296,25 +296,22 @@ function Changed(button) {
 
 function openEnvelope() {
   if (!envelopeOpened) {
-    // Show flowers and letter
     document.getElementById("flowers").classList.add("show");
     document.getElementById("letter").classList.add("show");
     document.getElementById("envelope").classList.add("open-flap");
     envelopeOpened = true;
 
-    // Show and play loop video
     const loop = document.getElementById("loopVideo");
     loop.style.display = "block";
 
+    // Only trigger play after interaction, with volume
     loop.play().then(() => {
-      loop.volume = 0.4; // Set volume only after playback starts
+      loop.volume = 0.4; // Set sound volume here
     }).catch((err) => {
       console.error("Autoplay failed:", err);
     });
   }
 }
-
-
 
 function revealMessage(e) {
   e.stopPropagation();
