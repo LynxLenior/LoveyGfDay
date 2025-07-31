@@ -207,15 +207,12 @@
 <body>
 
 <!-- Background Video -->
-<video id="loopVideo" playsinline>
+<video id="loopVideo" playsinline style="display: none;" loop>
   <source src="Capy.mp4" type="video/mp4">
-  Your browser does not support the video tag.
 </video>
-
 
 <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
-<audio id="bgMusic" src="Night.mp3" preload="auto"></audio>
 
 <div class="LButton">
   <button class="LButton2" onclick="Changed(this)"></button>
@@ -275,22 +272,22 @@ function Changed(button) {
 
 function openEnvelope() {
   if (!envelopeOpened) {
+    // Show visuals
     document.getElementById("flowers").classList.add("show");
     document.getElementById("letter").classList.add("show");
     document.getElementById("envelope").classList.add("open-flap");
 
+    // Make page background transparent for video
     document.body.style.backgroundColor = "transparent";
 
-    // Show and play the video background
+    // Show and play video
     const video = document.getElementById("loopVideo");
-    video.style.display = "block";     // Make sure it's visible
-    video.muted = false;               // Allow sound
-    video.loop = true;                 // Loop the video
-    video.currentTime = 0;            // Start from beginning
+    video.style.display = "block";
+    video.muted = false;
+    video.volume = 0.8;
+    video.currentTime = 0;
+    video.play().catch(err => console.error("Video error:", err));
 
-    video.play().catch(e => {
-      console.error("Video failed to play:", e);
-    });
 
     envelopeOpened = true;
   }
