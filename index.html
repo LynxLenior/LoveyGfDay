@@ -24,13 +24,7 @@
       height: 100vh;
       object-fit: cover;
       z-index: -1;
-      opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
-    }
-
-    #loopVideo.show {
-      opacity: 1;
+      display: none;
     }
 
     .LButton {
@@ -40,7 +34,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 20px;
+      position: fixed;
+      top: 30px;
+      left: 50px;
       z-index: 2;
     }
 
@@ -53,16 +49,17 @@
     }
 
     .envelope-wrapper {
-      position: absolute;
-      bottom: -200px;
-      display: flex;
+      position: fixed;
+      bottom: 100px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
       justify-content: center;
-      transition: bottom 1s ease;
       z-index: 3;
     }
 
     .envelope-wrapper.show {
-      bottom: 100px;
+      display: flex;
     }
 
     .envelope {
@@ -148,7 +145,7 @@
 </head>
 <body>
 
-<video id="loopVideo" autoplay loop playsinline>
+<video id="loopVideo" autoplay loop muted playsinline>
   <source src="Capy.mp4" type="video/mp4">
 </video>
 
@@ -209,7 +206,7 @@ function openEnvelope() {
 
   document.body.style.backgroundColor = "transparent";
 
-  video.classList.add("show");
+  video.style.display = "block";
   video.volume = 0.4;
   video.currentTime = 0;
   video.play().catch(console.error);
