@@ -14,7 +14,7 @@
       margin: 0;
     }
 
-    #loopVideo {
+     #loopVideo {
       position: fixed;
       top: 0;
       left: 0;
@@ -22,10 +22,9 @@
       height: 100vh;
       object-fit: cover;
       z-index: -1;
-      opacity: 0;
-      transition: opacity 1s ease;
-      pointer-events: none;
+      display: none;
     }
+
 
     #loopVideo.show {
       opacity: 1;
@@ -208,9 +207,11 @@
 <body>
 
 <!-- Background Video -->
-<video id="loopVideo" autoplay playsinline>
+<video id="loopVideo" playsinline>
   <source src="Capy.mp4" type="video/mp4">
+  Your browser does not support the video tag.
 </video>
+
 
 <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
@@ -274,26 +275,45 @@ function Changed(button) {
 
 function openEnvelope() {
   if (!envelopeOpened) {
-    // Show UI elements
     document.getElementById("flowers").classList.add("show");
     document.getElementById("letter").classList.add("show");
     document.getElementById("envelope").classList.add("open-flap");
 
-    // Set background transparent so video can show through
     document.body.style.backgroundColor = "transparent";
 
-    // Show and play video background
+    // Show and play the video background
     const video = document.getElementById("loopVideo");
-    video.classList.add("show");         // Ensure CSS makes it visible (e.g., via opacity or display)
-    video.muted = false;                 // Unmute if you want audio
-    video.loop = true;                   // Ensure it loops
-    video.currentTime = 0;               // Restart from beginning
+    video.style.display = "block";     // Make sure it's visible
+    video.muted = false;               // Allow sound
+    video.loop = true;                 // Loop the video
+    video.currentTime = 0;            // Start from beginning
+
     video.play().catch(e => {
-      console.error("Autoplay failed:", e);
+      console.error("Video failed to play:", e);
     });
 
     envelopeOpened = true;
   }
+}
+
+
+function revealMessage(e) {
+  e.stopPropagation();
+  const letter = document.getElementById("letter");
+
+  if (!letterZoomed) {
+    letter.classList.add("zoom");
+    setTimeout(() => {
+      document.getElementById("message").classList.add("show");
+    }, 600);
+    letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
+  } else {
+    letter.classList.remove("zoom");
+    document.getElementById("message").classList.remove("show");
+    letter.innerHTML = "Click to reveal message";
+  }
+
+  letterZoomed = !letterZoomed;
 }
 </script>
 
