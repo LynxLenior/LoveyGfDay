@@ -58,7 +58,8 @@ body {
   position: relative;
   width: 240px;
   left: 200px;
-  height: 160px;
+  top: 100px;
+  height: 100px;
   background: #f8bfc4;
   border: 2px solid #d3959b;
   border-radius: 10px 10px 0 0;
@@ -204,6 +205,9 @@ body {
   <source src="WedLoop.mp4" type="video/mp4">
 </video>
 
+<audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
+<audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
 <div class="LButton">
   <button class="LButton2" onclick="Changed()"></button>
 </div>
@@ -249,11 +253,22 @@ let envelopeOpened = false;
 let letterZoomed = false;
 
 function Changed() {
+   const clickSound = document.getElementById("clickSound");
+    if (clickSound) {
+        clickSound.volume = 0.4;
+        clickSound.play();
+    }
   if (!Grad) {
     document.body.style.backgroundColor = "white";
 
     setTimeout(() => {
       document.getElementById("envWrapper").classList.add("show");
+      const popSound = document.getElementById("popSound");
+      if (popSound) {
+        popSound.volume = 0.4;
+        popSound.play();
+      }
+
     }, 3000);
   } else {
     document.body.style.backgroundImage = "";
