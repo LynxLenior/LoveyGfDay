@@ -1,17 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <title>Capy Surprise</title>
   <style>
     body {
+      margin: 0;
+      height: 100vh;
       background-color: #2b2b2b;
+      color: white;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
-      color: white;
-      overflow: hidden;
       flex-direction: column;
-      margin: 0;
+      overflow: hidden;
     }
 
     #loopVideo {
@@ -32,37 +34,31 @@
     }
 
     .LButton {
-      display: flex;
       height: 80px;
       width: 50px;
-      position: relative;
-      align-items: center;
       background-color: #595858;
+      display: flex;
+      align-items: center;
       justify-content: center;
       margin-bottom: 20px;
-      z-index: 1;
+      z-index: 2;
     }
 
     .LButton2 {
-      flex: 1;
-      display: flex;
-      align-items: center;
       height: 25px;
       width: 25px;
-      position: absolute;
       background-color: #ABA1A1;
       cursor: pointer;
+      border: none;
     }
 
     .envelope-wrapper {
       position: absolute;
       bottom: -200px;
       display: flex;
-      align-items: flex-end;
       justify-content: center;
       transition: bottom 1s ease;
-      gap: 10px;
-      cursor: pointer;
+      z-index: 3;
     }
 
     .envelope-wrapper.show {
@@ -72,17 +68,10 @@
     .envelope {
       position: relative;
       width: 240px;
-      left: 200px;
-      top: 100px;
       height: 100px;
       background: #f8bfc4;
       border: 2px solid #d3959b;
       border-radius: 10px 10px 0 0;
-      overflow: visible;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       padding-top: 40px;
       z-index: 2;
     }
@@ -96,60 +85,13 @@
       height: 80px;
       background: #f4aab2;
       clip-path: polygon(0 0, 50% 80%, 100% 0);
-      z-index: -1;
       border-bottom: 2px solid #d3959b;
+      z-index: -1;
     }
 
     .envelope.open-flap::before {
       transform: rotateX(180deg);
       top: -80px;
-      z-index: -1;
-    }
-
-    .flowers {
-      position: absolute;
-      top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 8px;
-      opacity: 0;
-      transition: opacity 1s ease;
-      max-width: 100%;
-      z-index: 0;
-    }
-
-    .flowers.show {
-      opacity: 1;
-    }
-
-    .flower {
-      position: relative;
-      width: 30px;
-      height: 60px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .flower .petal {
-      width: 24px;
-      height: 24px;
-      background-color: pink;
-      border-radius: 50% 50% 0 0;
-      margin-bottom: 2px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-    }
-
-    .flower.yellow .petal { background-color: #f4e664; }
-    .flower.blue .petal { background-color: #ace7ef; }
-
-    .flower .stem {
-      width: 4px;
-      height: 30px;
-      background: green;
-      border-radius: 2px;
     }
 
     .letter {
@@ -160,20 +102,19 @@
       border: 1px solid #ccc;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       bottom: 100%;
-      left: 0;
       transform: translateY(100%);
-      transition: transform 1s ease, opacity 0.5s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 14px;
       color: #333;
-      z-index: 1;
-      cursor: pointer;
       opacity: 0;
       padding: 10px;
       line-height: 1.5;
-      text-indent: 20px;
+      text-align: center;
+      transition: transform 1s ease, opacity 0.5s ease;
+      z-index: 3;
+      cursor: pointer;
       white-space: pre-line;
     }
 
@@ -207,11 +148,9 @@
 </head>
 <body>
 
-<!-- Video (hidden initially, visible after envelope) -->
-<video id="loopVideo" autoplay loop playsinline muted>
+<video id="loopVideo" autoplay loop playsinline>
   <source src="Capy.mp4" type="video/mp4">
 </video>
-
 
 <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
@@ -223,25 +162,15 @@
 
 <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
   <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
-  <div class="envelope" id="envelope">
-    <div class="flowers" id="flowers">
-      <div class="flower"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower yellow"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower blue"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower yellow"><div class="petal"></div><div class="stem"></div></div>
-      <div class="flower blue"><div class="petal"></div><div class="stem"></div></div>
-    </div>
-  </div>
+  <div class="envelope" id="envelope"></div>
 </div>
 
 <div class="message" id="message"></div>
 
 <script>
-let Grad = false;
+let hasBeenClicked = false;
 let envelopeOpened = false;
 let letterZoomed = false;
-let hasBeenClicked = false;
 
 function Changed(button) {
   const clickSound = document.getElementById("clickSound");
@@ -251,48 +180,46 @@ function Changed(button) {
     clickSound.play();
   }
 
-  if (hasBeenClicked) return;
-  if (button.disabled) return;
+  if (hasBeenClicked || button.disabled) return;
 
   button.disabled = true;
   setTimeout(() => button.disabled = false, 3000);
 
-  if (!Grad) {
-    document.body.style.backgroundColor = "white"; // change background to white
-    setTimeout(() => {
-      document.getElementById("envWrapper").classList.add("show");
-      const popSound = document.getElementById("popSound");
-      if (popSound) {
-        popSound.volume = 0.4;
-        popSound.play();
-      }
-    }, 3000);
-  }
+  document.body.style.backgroundColor = "white";
+  setTimeout(() => {
+    document.getElementById("envWrapper").classList.add("show");
+    const popSound = document.getElementById("popSound");
+    if (popSound) {
+      popSound.volume = 0.4;
+      popSound.play();
+    }
+  }, 3000);
 
-  Grad = !Grad;
   hasBeenClicked = true;
 }
 
 function openEnvelope() {
-  if (!envelopeOpened) {
-    document.getElementById("flowers").classList.add("show");
-    document.getElementById("letter").classList.add("show");
-    document.getElementById("envelope").classList.add("open-flap");
-    envelopeOpened = true;
+  if (envelopeOpened) return;
 
-    document.body.style.backgroundColor = "transparent";
-    const video = document.getElementById("loopVideo");
-    video.classList.add("show");
-    video.volume = 0.4;
-    video.currentTime = 0;
-    video.play().catch(err => console.error("Video play failed:", err));
+  const video = document.getElementById("loopVideo");
+  const bgMusic = document.getElementById("bgMusic");
 
-    const bgMusic = document.getElementById("bgMusic");
-    if (bgMusic) {
-      bgMusic.volume = 0.4;
-      bgMusic.play();
-    }
+  document.getElementById("letter").classList.add("show");
+  document.getElementById("envelope").classList.add("open-flap");
+
+  document.body.style.backgroundColor = "transparent";
+
+  video.classList.add("show");
+  video.volume = 0.4;
+  video.currentTime = 0;
+  video.play().catch(console.error);
+
+  if (bgMusic) {
+    bgMusic.volume = 0.4;
+    bgMusic.play();
   }
+
+  envelopeOpened = true;
 }
 
 function revealMessage(e) {
@@ -304,11 +231,11 @@ function revealMessage(e) {
     setTimeout(() => {
       document.getElementById("message").classList.add("show");
     }, 600);
-    letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
+    letter.innerText = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
   } else {
     letter.classList.remove("zoom");
     document.getElementById("message").classList.remove("show");
-    letter.innerHTML = "Click to reveal message";
+    letter.innerText = "Click to reveal message";
   }
 
   letterZoomed = !letterZoomed;
