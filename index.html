@@ -210,7 +210,7 @@ body {
 <audio id="bgMusic" src="Night.mp3" preload="auto"></audio>
 
 <div class="LButton">
-  <button class="LButton2" onclick="Changed()"></button>
+  <button class="LButton2" onclick="Changed(this)"></button>
 </div>
 
 <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
@@ -255,14 +255,21 @@ let letterZoomed = false;
 
 function Changed() {
    const clickSound = document.getElementById("clickSound");
-    if (clickSound) {
         clickSound.volume = 0.4;
         clickSound.play();
 
         setTimeout(() => {
         clickSound.pause();
-      }, 4000);
-    }
+      }, 3000);
+      if (envelopeOpened) return;
+
+    if (button.disabled) return; // Prevent if still on cooldown
+
+  button.disabled = true; // Disable the button
+  setTimeout(() => {
+    button.disabled = false; // Re-enable after cooldown
+  }, 3000); // Cooldown in milliseconds (e.g., 3 seconds)
+
   if (!Grad) {
     document.body.style.backgroundColor = "white";
 
