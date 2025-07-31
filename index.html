@@ -298,30 +298,32 @@
         const video = document.getElementById("loopVideo");
         const body = document.body;
 
-        // Step 1: Make the video visible
+        // Diagnostic log: Check if the function is reaching this point
+        console.log("openEnvelope() function called. Attempting to play video.");
+
+        // Make the video visible
         video.style.display = "block";
         video.style.opacity = "1";
 
-        // Step 2: Mute the video to ensure it can autoplay
-        // and then play it. This is the most reliable method.
+        // Mute the video to ensure it can autoplay and then play it.
         video.muted = true;
-        video.volume = 0; // Set volume to 0 as a precaution
+        video.volume = 0; 
         
         const playPromise = video.play();
 
         if (playPromise !== undefined) {
             playPromise.then(() => {
-                // Video started successfully (it's muted)
+                // Diagnostic log: This confirms the play promise was successful
+                console.log("Video play promise successful. Video should be playing.");
                 body.style.backgroundColor = "transparent";
-                console.log("Video started playing (muted).");
 
-                // Step 3: Now, unmute it after the user's click has been registered
+                // Now, unmute it after the user's click has been registered
                 video.muted = false;
                 video.volume = 0.8;
                 console.log("Video unmuted and volume set.");
             }).catch(error => {
-                // If this fails, it's a critical error (e.g., file not found).
-                console.error("Video play failed (could not even play muted):", error);
+                // Diagnostic log: This would tell us if the play failed
+                console.error("Video play failed:", error);
                 body.style.backgroundColor = "white";
             });
         }
