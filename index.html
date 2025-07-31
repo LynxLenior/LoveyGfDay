@@ -21,14 +21,11 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      z-index: -1;
-      display: none;
-    }
-
-
-    #loopVideo.show {
-      opacity: 1;
-    }
+      z-index: -1; /* This is correct for background */
+      display: none; /* Keep this to hide it initially */
+      opacity: 0;
+      transition: opacity 1s ease; /* Add a transition for a smoother fade-in */
+  }
 
     .LButton {
       display: flex;
@@ -271,28 +268,39 @@ function Changed(button) {
 }
 
 function openEnvelope() {
-  if (!envelopeOpened) {
-    // Show visuals
-    document.getElementById("flowers").classList.add("show");
-    document.getElementById("letter").classList.add("show");
-    document.getElementById("envelope").classList.add("open-flap");
+    if (!envelopeOpened) {
+        // Show visuals
+        document.getElementById("flowers").classList.add("show");
+        document.getElementById("letter").classList.add("show");
+        document.getElementById("envelope").classList.add("open-flap");
 
-    // Make page background transparent for video
-    document.body.style.backgroundColor = "transparent";
+        const video = document.getElementById("loopVideo");
+        const body = document.body;
 
-    // Show and play video
-    const video = document.getElementById("loopVideo");
-    video.style.display = "block";
-    video.muted = false;
-    video.volume = 0.8;
-    video.currentTime = 0;
-    video.play().catch(err => console.error("Video error:", err));
+ 
+        video.style.display = "block";
+        video.style.opacity = "1";
+        video.muted = false; 
+        video.volume = 0.8;
+        video.currentTime = 0;
 
+        const playPromise = video.play();
 
-    envelopeOpened = true;
-  }
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+
+                body.style.backgroundColor = "transparent";
+                console.log("Video started playing.");
+            }).catch(error => {
+                console.error("Video play failed:", error);
+                body.style.backgroundColor = "white"; 
+                
+            });
+        }
+
+        envelopeOpened = true;
+    }
 }
-
 
 function revealMessage(e) {
   e.stopPropagation();
