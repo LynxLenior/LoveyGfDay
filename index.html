@@ -207,6 +207,7 @@ body {
 
 <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
 <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+<audio id="bgMusic" src="Night.mp3" preload="auto"></audio>
 
 <div class="LButton">
   <button class="LButton2" onclick="Changed()"></button>
@@ -257,6 +258,10 @@ function Changed() {
     if (clickSound) {
         clickSound.volume = 0.4;
         clickSound.play();
+
+        setTimeout(() => {
+        clickSound.pause();
+      }, 4000);
     }
   if (!Grad) {
     document.body.style.backgroundColor = "white";
@@ -305,6 +310,12 @@ function openEnvelope() {
       loop.style.display = "block";
       loop.play();
     };
+    const bgMusic = document.getElementById("bgMusic");
+    if (bgMusic) {
+      bgMusic.volume = 0.4;
+      bgMusic.currentTime = 0;
+      bgMusic.play();
+    }
   }
 }
 
