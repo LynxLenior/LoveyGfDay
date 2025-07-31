@@ -289,37 +289,46 @@
         }
 
         function openEnvelope() {
-            if (!envelopeOpened) {
-                // Show visuals
-                document.getElementById("flowers").classList.add("show");
-                document.getElementById("letter").classList.add("show");
-                document.getElementById("envelope").classList.add("open-flap");
+    if (!envelopeOpened) {
+        // Show visuals
+        document.getElementById("flowers").classList.add("show");
+        document.getElementById("letter").classList.add("show");
+        document.getElementById("envelope").classList.add("open-flap");
 
-                const video = document.getElementById("loopVideo");
-                const body = document.body;
+        const video = document.getElementById("loopVideo");
+        const body = document.body;
 
-                // Show the video and unmute it
-                video.style.display = "block";
-                video.style.opacity = "1";
-                
-                // Unmute the video on this user interaction
-                const playPromise = video.play();
+        // Step 1: Make the video visible
+        video.style.display = "block";
+        video.style.opacity = "1";
 
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        video.muted = false;
-                        video.volume = 0.8;
-                        body.style.backgroundColor = "transparent";
-                        console.log("Video started playing.");
-                    }).catch(error => {
-                        console.error("Video play failed:", error);
-                        body.style.backgroundColor = "white";
-                    });
-                }
-                
-                envelopeOpened = true;
-            }
+        // Step 2: Mute the video to ensure it can autoplay
+        // and then play it. This is the most reliable method.
+        video.muted = true;
+        video.volume = 0; // Set volume to 0 as a precaution
+        
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                // Video started successfully (it's muted)
+                body.style.backgroundColor = "transparent";
+                console.log("Video started playing (muted).");
+
+                // Step 3: Now, unmute it after the user's click has been registered
+                video.muted = false;
+                video.volume = 0.8;
+                console.log("Video unmuted and volume set.");
+            }).catch(error => {
+                // If this fails, it's a critical error (e.g., file not found).
+                console.error("Video play failed (could not even play muted):", error);
+                body.style.backgroundColor = "white";
+            });
         }
+        
+        envelopeOpened = true;
+    }
+}
 
         function revealMessage(e) {
             e.stopPropagation();
