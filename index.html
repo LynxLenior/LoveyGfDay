@@ -11,7 +11,7 @@
       color: white;
       overflow: hidden;
       flex-direction: column;
-      transition: background-image 1s ease;
+      transition: background 1s ease;
       margin: 0;
     }
 
@@ -24,7 +24,13 @@
       height: 100vh;
       object-fit: cover;
       z-index: -1;
-      display: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+      pointer-events: none;
+    }
+
+    #loopVideo.show {
+      opacity: 1;
     }
 
     .LButton {
@@ -203,7 +209,7 @@
 </head>
 <body>
 
-<video id="loopVideo" autoplay loop playsinline>
+<video id="loopVideo" autoplay loop playsinline muted>
   <source src="Capy.mp4" type="video/mp4">
 </video>
 
@@ -235,23 +241,22 @@
 let Grad = false;
 let envelopeOpened = false;
 let letterZoomed = false;
-let hasBeenClicked = false; // ✅ NEW FLAG
+let hasBeenClicked = false;
 
 function Changed(button) {
   const clickSound = document.getElementById("clickSound");
   if (clickSound) {
-    clickSound.currentTime = 0; // reset sound so it plays again
+    clickSound.currentTime = 0;
     clickSound.volume = 0.4;
     clickSound.play();
   }
 
-  // ✅ After first click, stop all other actions
   if (hasBeenClicked) return;
 
   if (button.disabled) return;
 
   button.disabled = true;
-  setTimeout(() => button.disabled = false, 3000); // cooldown
+  setTimeout(() => button.disabled = false, 3000);
 
   if (!Grad) {
     document.body.style.backgroundColor = "transparent";
@@ -264,22 +269,17 @@ function Changed(button) {
         popSound.volume = 0.4;
         popSound.play();
       }
+
+      const loop = document.getElementById("loopVideo");
+      loop.classList.add("show");
+      loop.play().then(() => {
+        loop.volume = 0.4;
+      }).catch(err => console.error("Video play failed:", err));
     }, 3000);
-  } else {
-    document.body.style.backgroundImage = "";
-    document.body.style.backgroundColor = "#2b2b2b";
-    document.getElementById("envWrapper").classList.remove("show");
-    document.getElementById("flowers").classList.remove("show");
-    document.getElementById("letter").classList.remove("show", "zoom");
-    document.getElementById("message").classList.remove("show");
-    document.getElementById("envelope").classList.remove("open-flap");
-    envelopeOpened = false;
-    letterZoomed = false;
-    document.getElementById("letter").innerHTML = "Click to reveal message";
   }
 
   Grad = !Grad;
-  hasBeenClicked = true; // ✅ prevent future background changes
+  hasBeenClicked = true;
 }
 
 function openEnvelope() {
@@ -288,12 +288,6 @@ function openEnvelope() {
     document.getElementById("letter").classList.add("show");
     document.getElementById("envelope").classList.add("open-flap");
     envelopeOpened = true;
-
-    const loop = document.getElementById("loopVideo");
-    loop.style.display = "block";
-    loop.play().then(() => {
-      loop.volume = 0.4;
-    }).catch(err => console.error("Video play failed:", err));
 
     const bgMusic = document.getElementById("bgMusic");
     if (bgMusic) {
