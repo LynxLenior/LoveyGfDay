@@ -235,25 +235,30 @@
 let Grad = false;
 let envelopeOpened = false;
 let letterZoomed = false;
+let hasBeenClicked = false; // ✅ NEW FLAG
 
 function Changed(button) {
-const clickSound = document.getElementById("clickSound");
-if (clickSound) {
-  clickSound.volume = 0.4;
-  clickSound.currentTime = 0; // Reset to beginning
-  clickSound.play();
-}
+  const clickSound = document.getElementById("clickSound");
+  if (clickSound) {
+    clickSound.currentTime = 0; // reset sound so it plays again
+    clickSound.volume = 0.4;
+    clickSound.play();
+  }
 
-  if (envelopeOpened) return;
+  // ✅ After first click, stop all other actions
+  if (hasBeenClicked) return;
 
   if (button.disabled) return;
+
   button.disabled = true;
-  setTimeout(() => button.disabled = false, 3000);
+  setTimeout(() => button.disabled = false, 3000); // cooldown
 
   if (!Grad) {
-    document.body.style.backgroundColor = "white";
+    document.body.style.backgroundColor = "transparent";
+
     setTimeout(() => {
       document.getElementById("envWrapper").classList.add("show");
+
       const popSound = document.getElementById("popSound");
       if (popSound) {
         popSound.volume = 0.4;
@@ -261,6 +266,7 @@ if (clickSound) {
       }
     }, 3000);
   } else {
+    document.body.style.backgroundImage = "";
     document.body.style.backgroundColor = "#2b2b2b";
     document.getElementById("envWrapper").classList.remove("show");
     document.getElementById("flowers").classList.remove("show");
@@ -273,6 +279,7 @@ if (clickSound) {
   }
 
   Grad = !Grad;
+  hasBeenClicked = true; // ✅ prevent future background changes
 }
 
 function openEnvelope() {
