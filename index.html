@@ -1,204 +1,209 @@
 <!DOCTYPE html>
 <html>
 <head>
-<style>
-body {
-  background-color: #2b2b2b;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  color: white;
-  overflow: hidden;
-  flex-direction: column;
-  transition: background-image 1s ease;
-}
+  <style>
+    body {
+      background-color: #2b2b2b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      color: white;
+      overflow: hidden;
+      flex-direction: column;
+      transition: background-image 1s ease;
+      margin: 0;
+    }
 
-/* Button Styles */
-.LButton {
-  display: flex;
-  height: 80px;
-  width: 50px;
-  position: relative;
-  align-items: center;
-  background-color: #595858;
-  justify-content: center;
-  margin-bottom: 20px;
-  z-index: 0;
-}
+    /* Video background */
+    #loopVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -1;
+      display: none;
+    }
 
-.LButton2 {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  height: 25px;
-  width: 25px;
-  position: absolute;
-  background-color: #ABA1A1;
-  cursor: pointer;
-}
+    .LButton {
+      display: flex;
+      height: 80px;
+      width: 50px;
+      position: relative;
+      align-items: center;
+      background-color: #595858;
+      justify-content: center;
+      margin-bottom: 20px;
+      z-index: 1;
+    }
 
-/* Envelope and Animation */
-.envelope-wrapper {
-  position: absolute;
-  bottom: -200px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  transition: bottom 1s ease;
-  gap: 10px;
-  cursor: pointer;
-}
+    .LButton2 {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      height: 25px;
+      width: 25px;
+      position: absolute;
+      background-color: #ABA1A1;
+      cursor: pointer;
+    }
 
-.envelope-wrapper.show {
-  bottom: 100px;
-}
+    .envelope-wrapper {
+      position: absolute;
+      bottom: -200px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      transition: bottom 1s ease;
+      gap: 10px;
+      cursor: pointer;
+    }
 
-.envelope {
-  position: relative;
-  width: 240px;
-  left: 200px;
-  top: 100px;
-  height: 100px;
-  background: #f8bfc4;
-  border: 2px solid #d3959b;
-  border-radius: 10px 10px 0 0;
-  overflow: visible;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  padding-top: 40px;
-  z-index: 2;
-}
+    .envelope-wrapper.show {
+      bottom: 100px;
+    }
 
-/* Stylized flap */
-.envelope::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  background: #f4aab2;
-  clip-path: polygon(0 0, 50% 80%, 100% 0);
-  z-index: -1;
-  border-bottom: 2px solid #d3959b;
-}
+    .envelope {
+      position: relative;
+      width: 240px;
+      left: 200px;
+      top: 100px;
+      height: 100px;
+      background: #f8bfc4;
+      border: 2px solid #d3959b;
+      border-radius: 10px 10px 0 0;
+      overflow: visible;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding-top: 40px;
+      z-index: 2;
+    }
 
-.envelope.open-flap::before {
-  transform: rotateX(180deg);
-  top: -80px;
-  z-index: -1;
-}
+    .envelope::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: #f4aab2;
+      clip-path: polygon(0 0, 50% 80%, 100% 0);
+      z-index: -1;
+      border-bottom: 2px solid #d3959b;
+    }
 
-/* Flowers */
-.flowers {
-  position: absolute;
-  top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  opacity: 0;
-  transition: opacity 1s ease;
-  max-width: 100%;
-  z-index: 0;
-}
+    .envelope.open-flap::before {
+      transform: rotateX(180deg);
+      top: -80px;
+      z-index: -1;
+    }
 
-.flowers.show {
-  opacity: 1;
-}
+    .flowers {
+      position: absolute;
+      top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      max-width: 100%;
+      z-index: 0;
+    }
 
-.flower {
-  position: relative;
-  width: 30px;
-  height: 60px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 10px;
-}
+    .flowers.show {
+      opacity: 1;
+    }
 
-.flower .petal {
-  width: 24px;
-  height: 24px;
-  background-color: pink;
-  border-radius: 50% 50% 0 0;
-  margin-bottom: 2px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.2);
-}
-.flower.yellow .petal { background-color: #f4e664; }
-.flower.blue .petal { background-color: #ace7ef; }
+    .flower {
+      position: relative;
+      width: 30px;
+      height: 60px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
 
-.flower .stem {
-  width: 4px;
-  height: 30px;
-  background: green;
-  border-radius: 2px;
-}
+    .flower .petal {
+      width: 24px;
+      height: 24px;
+      background-color: pink;
+      border-radius: 50% 50% 0 0;
+      margin-bottom: 2px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
 
-/* Letter */
-.letter {
-  position: absolute;
-  width: 180px;
-  height: 80px;
-  background: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  bottom: 100%;
-  left: 0;
-  transform: translateY(100%);
-  transition: transform 1s ease, opacity 0.5s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: #333;
-  z-index: 1;
-  cursor: pointer;
-  opacity: 0;
-  padding: 10px;
-  line-height: 1.5;
-  text-indent: 20px;
-  white-space: pre-line;
-}
+    .flower.yellow .petal { background-color: #f4e664; }
+    .flower.blue .petal { background-color: #ace7ef; }
 
-.letter.show {
-  transform: translate(-200%, -50%);
-  opacity: 1;
-}
+    .flower .stem {
+      width: 4px;
+      height: 30px;
+      background: green;
+      border-radius: 2px;
+    }
 
-.letter.zoom {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) scale(2);
-  z-index: 100;
-  transition: transform 0.6s ease;
-}
+    .letter {
+      position: absolute;
+      width: 180px;
+      height: 80px;
+      background: white;
+      border: 1px solid #ccc;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      bottom: 100%;
+      left: 0;
+      transform: translateY(100%);
+      transition: transform 1s ease, opacity 0.5s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: #333;
+      z-index: 1;
+      cursor: pointer;
+      opacity: 0;
+      padding: 10px;
+      line-height: 1.5;
+      text-indent: 20px;
+      white-space: pre-line;
+    }
 
-.message {
-  display: none;
-  margin-top: 10px;
-  font-size: 16px;
-  color: #fff;
-  z-index: 101;
-  position: relative;
-}
+    .letter.show {
+      transform: translate(-200%, -50%);
+      opacity: 1;
+    }
 
-.message.show {
-  display: block;
-}
+    .letter.zoom {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(2);
+      z-index: 100;
+      transition: transform 0.6s ease;
+    }
 
-#audio-placeholder {
-  display: none;
-}
-</style>
+    .message {
+      display: none;
+      margin-top: 10px;
+      font-size: 16px;
+      color: #fff;
+      z-index: 101;
+      position: relative;
+    }
+
+    .message.show {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-<!-- Looping background video -->
-<video id="loopVideo" autoplay loop playsinline style="position:fixed; top:0; left:0; width:100vw; height:100vh; object-fit:cover; z-index:-2; display:none;">
+
+<video id="loopVideo" autoplay loop playsinline>
   <source src="Capy.mp4" type="video/mp4">
 </video>
 
@@ -207,7 +212,7 @@ body {
 <audio id="bgMusic" src="Night.mp3" preload="auto"></audio>
 
 <div class="LButton">
-  <button class="LButton2" onclick="Changed(this)"> </button>
+  <button class="LButton2" onclick="Changed(this)"></button>
 </div>
 
 <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
@@ -225,7 +230,6 @@ body {
 </div>
 
 <div class="message" id="message"></div>
-<div id="audio-placeholder">[Sound Placeholder]</div>
 
 <script>
 let Grad = false;
@@ -233,22 +237,21 @@ let envelopeOpened = false;
 let letterZoomed = false;
 
 function Changed(button) {
-  const clickSound = document.getElementById("clickSound");
-  if (clickSound) {
-    clickSound.volume = 0.4;
-    clickSound.play();
-    setTimeout(() => clickSound.pause(), 3000);
-  }
+const clickSound = document.getElementById("clickSound");
+if (clickSound) {
+  clickSound.volume = 0.4;
+  clickSound.currentTime = 0; // Reset to beginning
+  clickSound.play();
+}
 
   if (envelopeOpened) return;
-  if (button.disabled) return;
 
+  if (button.disabled) return;
   button.disabled = true;
   setTimeout(() => button.disabled = false, 3000);
 
   if (!Grad) {
     document.body.style.backgroundColor = "white";
-
     setTimeout(() => {
       document.getElementById("envWrapper").classList.add("show");
       const popSound = document.getElementById("popSound");
@@ -258,7 +261,6 @@ function Changed(button) {
       }
     }, 3000);
   } else {
-    document.body.style.backgroundImage = "";
     document.body.style.backgroundColor = "#2b2b2b";
     document.getElementById("envWrapper").classList.remove("show");
     document.getElementById("flowers").classList.remove("show");
@@ -282,12 +284,9 @@ function openEnvelope() {
 
     const loop = document.getElementById("loopVideo");
     loop.style.display = "block";
-
     loop.play().then(() => {
       loop.volume = 0.4;
-    }).catch((err) => {
-      console.error("Autoplay failed:", err);
-    });
+    }).catch(err => console.error("Video play failed:", err));
 
     const bgMusic = document.getElementById("bgMusic");
     if (bgMusic) {
