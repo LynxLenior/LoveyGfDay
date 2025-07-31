@@ -11,11 +11,9 @@
       color: white;
       overflow: hidden;
       flex-direction: column;
-      transition: background 1s ease;
       margin: 0;
     }
 
-    /* Video background */
     #loopVideo {
       position: fixed;
       top: 0;
@@ -209,7 +207,8 @@
 </head>
 <body>
 
-<video id="loopVideo" autoplay loop playsinline muted>
+<!-- Video (not muted, not autoplaying) -->
+<video id="loopVideo" loop playsinline>
   <source src="Capy.mp4" type="video/mp4">
 </video>
 
@@ -252,29 +251,19 @@ function Changed(button) {
   }
 
   if (hasBeenClicked) return;
-
   if (button.disabled) return;
 
   button.disabled = true;
   setTimeout(() => button.disabled = false, 3000);
 
   if (!Grad) {
-    document.body.style.backgroundColor = "transparent";
-
     setTimeout(() => {
       document.getElementById("envWrapper").classList.add("show");
-
       const popSound = document.getElementById("popSound");
       if (popSound) {
         popSound.volume = 0.4;
         popSound.play();
       }
-
-      const loop = document.getElementById("loopVideo");
-      loop.classList.add("show");
-      loop.play().then(() => {
-        loop.volume = 0.4;
-      }).catch(err => console.error("Video play failed:", err));
     }, 3000);
   }
 
@@ -288,6 +277,12 @@ function openEnvelope() {
     document.getElementById("letter").classList.add("show");
     document.getElementById("envelope").classList.add("open-flap");
     envelopeOpened = true;
+
+    const video = document.getElementById("loopVideo");
+    video.classList.add("show");
+    video.volume = 0.4;
+    video.currentTime = 0;
+    video.play().catch(err => console.error("Video play failed:", err));
 
     const bgMusic = document.getElementById("bgMusic");
     if (bgMusic) {
