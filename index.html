@@ -247,23 +247,25 @@ let Grad = false;
 let envelopeOpened = false;
 let letterZoomed = false;
 
-function Changed() {
-   const clickSound = document.getElementById("clickSound");
-    if (clickSound) {
-        clickSound.volume = 0.4;
-        clickSound.play();
+function Changed(button) {
+  const clickSound = document.getElementById("clickSound");
+  if (clickSound) {
+    clickSound.volume = 0.4;
+    clickSound.play();
 
-        setTimeout(() => {
-        clickSound.pause();
-      }, 3000);
-      if (envelopeOpened) return;
-    }
-    if (button.disabled) return; // Prevent if still on cooldown
+    setTimeout(() => {
+      clickSound.pause();
+    }, 3000);
+    
+    if (envelopeOpened) return;
+  }
 
-  button.disabled = true; // Disable the button
+  if (button.disabled) return;
+
+  button.disabled = true;
   setTimeout(() => {
-    button.disabled = false; // Re-enable after cooldown
-  }, 3000); // Cooldown in milliseconds (e.g., 3 seconds)
+    button.disabled = false;
+  }, 3000);
 
   if (!Grad) {
     document.body.style.backgroundColor = "white";
@@ -275,7 +277,6 @@ function Changed() {
         popSound.volume = 0.4;
         popSound.play();
       }
-
     }, 3000);
   } else {
     document.body.style.backgroundImage = "";
@@ -291,6 +292,7 @@ function Changed() {
   }
   Grad = !Grad;
 }
+
 
 function openEnvelope() {
   if (!envelopeOpened) {
