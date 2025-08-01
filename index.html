@@ -32,7 +32,7 @@
             width: 100vw;
             height: 100vh;
         }
-        
+
         .LButton {
             display: flex;
             height: 80px;
@@ -210,10 +210,36 @@
         .message.show {
             display: block;
         }
+
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 32 29.6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ff69b4' d='M23.6,0c-3.4,0-6.4,2.6-7.6,4.7C14.8,2.6,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z'/%3E%3C/svg%3E") no-repeat center center;
+            background-size: contain;
+            animation: fall 5s linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
     <div id="youtube-background"></div>
+    <div class="hearts-container" id="hearts-container"></div>
 
     <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
@@ -286,6 +312,7 @@
                 youtubeBackground.style.display = "block";
                 youtubeBackground.style.opacity = "1";
 
+                generateHearts();
                 envelopeOpened = true;
             }
         }
@@ -305,6 +332,21 @@
                 letter.innerHTML = "Click to reveal message";
             }
             letterZoomed = !letterZoomed;
+        }
+
+        function generateHearts() {
+            const container = document.getElementById("hearts-container");
+            for (let i = 0; i < 30; i++) {
+                const heart = document.createElement("div");
+                heart.className = "heart";
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${3 + Math.random() * 5}s`;
+                container.appendChild(heart);
+
+                setTimeout(() => {
+                    container.removeChild(heart);
+                }, 8000);
+            }
         }
     </script>
 </body>
