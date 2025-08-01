@@ -1,57 +1,337 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Video Accessibility Test</title>
     <style>
         body {
-            background-color: black;
-            color: white;
-            margin: 0;
+            background-color: #2b2b2b;
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            font-family: sans-serif;
+            color: white;
+            overflow: hidden;
+            flex-direction: column;
+            margin: 0;
         }
 
-        #video-container {
-            position: absolute;
-            top: 0;
-            left: 0;
+        #youtube-background {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        #youtube-background iframe {
             width: 100vw;
             height: 100vh;
         }
 
-        #testVideo {
+        .LButton {
+            display: flex;
+            height: 80px;
+            width: 50px;
+            position: relative;
+            align-items: center;
+            background-color: #595858;
+            justify-content: center;
+            margin-bottom: 20px;
+            z-index: 1;
+        }
+
+        .LButton2 {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            height: 25px;
+            width: 25px;
+            position: absolute;
+            background-color: #ABA1A1;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper {
+            position: absolute;
+            bottom: -200px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            transition: bottom 1s ease;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .envelope-wrapper.show {
+            bottom: 100px;
+        }
+
+        .envelope {
+            position: relative;
+            width: 240px;
+            left: 200px;
+            top: 100px;
+            height: 100px;
+            background: #f8bfc4;
+            border: 2px solid #d3959b;
+            border-radius: 10px 10px 0 0;
+            overflow: visible;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding-top: 40px;
+            z-index: 2;
+        }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
+            height: 80px;
+            background: #f4aab2;
+            clip-path: polygon(0 0, 50% 80%, 100% 0);
+            z-index: -1;
+            border-bottom: 2px solid #d3959b;
+        }
+
+        .envelope.open-flap::before {
+            transform: rotateX(180deg);
+            top: -80px;
+            z-index: -1;
+        }
+
+        .flowers {
+            position: absolute;
+            top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 1s ease;
+            max-width: 100%;
+            z-index: 0;
+        }
+
+        .flowers.show {
+            opacity: 1;
+        }
+
+        .flower {
+            position: relative;
+            width: 30px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .flower .petal {
+            width: 24px;
+            height: 24px;
+            background-color: pink;
+            border-radius: 50% 50% 0 0;
+            margin-bottom: 2px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .flower.yellow .petal {
+            background-color: #f4e664;
+        }
+
+        .flower.blue .petal {
+            background-color: #ace7ef;
+        }
+
+        .flower .stem {
+            width: 4px;
+            height: 30px;
+            background: green;
+            border-radius: 2px;
+        }
+
+        .letter {
+            position: absolute;
+            width: 180px;
+            height: 80px;
+            background: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            bottom: 100%;
+            left: 0;
+            transform: translateY(100%);
+            transition: transform 1s ease, opacity 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #333;
+            z-index: 1;
+            cursor: pointer;
+            opacity: 0;
+            padding: 10px;
+            line-height: 1.5;
+            text-indent: 20px;
+            white-space: pre-line;
+        }
+
+        .letter.show {
+            transform: translate(-200%, -50%);
+            opacity: 1;
+        }
+
+        .letter.zoom {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(2);
+            z-index: 100;
+            transition: transform 0.6s ease;
         }
 
         .message {
+            display: none;
+            margin-top: 10px;
+            font-size: 16px;
+            color: #fff;
+            z-index: 101;
             position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+        }
+
+        .message.show {
+            display: block;
         }
     </style>
 </head>
 <body>
+    <div id="youtube-background">
+        <iframe src="https://youtu.be/N7imaZ-TjGM"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen>
+        </iframe>
+    </div>
+    
+    <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
-    <div id="video-container">
-        <video id="testVideo" playsinline loop muted autoplay>
-            <source src="https://lynxlenior.github.io/LoveyGfDay/Capy.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
+    <div class="LButton">
+        <button class="LButton2" onclick="Changed(this)"></button>
     </div>
 
-    <div class="message">
-        <h1>Video Accessibility Test</h1>
-        <p>If you see a video playing in the background, your video file is working correctly.</p>
-        <p>If the background is just black, the video file cannot be accessed by your browser.</p>
+    <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
+        <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
+        <div class="envelope" id="envelope">
+            <div class="flowers" id="flowers">
+                <div class="flower">
+                    <div class="petal"></div>
+                    <div class="stem"></div>
+                </div>
+                <div class="flower yellow">
+                    <div class="petal"></div>
+                    <div class="stem"></div>
+                </div>
+                <div class="flower blue">
+                    <div class="petal"></div>
+                    <div class="stem"></div>
+                </div>
+                <div class="flower">
+                    <div class="petal"></div>
+                    <div class="stem"></div>
+                </div>
+                <div class="flower yellow">
+                    <div class="petal"></div>
+                    <div class="stem"></div>
+                </div>
+                <div class="flower blue">
+                    <div class="petal"></div>
+                    <div class="stem"></div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div class="message" id="message"></div>
 
+    <script>
+        let Grad = false;
+        let envelopeOpened = false;
+        let letterZoomed = false;
+        let hasBeenClicked = false;
+
+        function Changed(button) {
+            const clickSound = document.getElementById("clickSound");
+            if (clickSound) {
+                clickSound.currentTime = 0;
+                clickSound.volume = 0.4;
+                clickSound.play();
+            }
+
+            if (hasBeenClicked) return;
+            if (button.disabled) return;
+
+            button.disabled = true;
+            setTimeout(() => button.disabled = false, 3000);
+
+            if (!Grad) {
+                document.body.style.backgroundColor = "white";
+                setTimeout(() => {
+                    document.getElementById("envWrapper").classList.add("show");
+                    const popSound = document.getElementById("popSound");
+                    if (popSound) {
+                        popSound.volume = 0.4;
+                        popSound.play();
+                    }
+                }, 3000);
+            }
+
+            Grad = !Grad;
+            hasBeenClicked = true;
+        }
+
+        function openEnvelope() {
+            if (!envelopeOpened) {
+                document.getElementById("flowers").classList.add("show");
+                document.getElementById("letter").classList.add("show");
+                document.getElementById("envelope").classList.add("open-flap");
+                
+                const youtubeBackground = document.getElementById("youtube-background");
+                youtubeBackground.style.display = "block";
+                youtubeBackground.style.opacity = "1";
+                
+                const body = document.body;
+                body.style.backgroundColor = "transparent";
+
+                envelopeOpened = true;
+            }
+        }
+
+        function revealMessage(e) {
+            e.stopPropagation();
+            const letter = document.getElementById("letter");
+
+            if (!letterZoomed) {
+                letter.classList.add("zoom");
+                setTimeout(() => {
+                    document.getElementById("message").classList.add("show");
+                }, 600);
+                letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
+            } else {
+                letter.classList.remove("zoom");
+                document.getElementById("message").classList.remove("show");
+                letter.innerHTML = "Click to reveal message";
+            }
+
+            letterZoomed = !letterZoomed;
+        }
+    </script>
 </body>
 </html>
