@@ -288,11 +288,6 @@
             setTimeout(() => {
                 document.getElementById("envWrapper").classList.add("show");
                 
-                // NEW: Show the YouTube video on button press
-                const youtubeBackground = document.getElementById("youtube-background");
-                youtubeBackground.style.display = "block";
-                youtubeBackground.style.opacity = "1";
-                
                 const popSound = document.getElementById("popSound");
                 if (popSound) {
                     popSound.volume = 0.4;
@@ -311,7 +306,10 @@
             document.getElementById("letter").classList.add("show");
             document.getElementById("envelope").classList.add("open-flap");
             
-            // This code has been moved to the Changed() function
+            // This code makes the video visible
+            const youtubeBackground = document.getElementById("youtube-background");
+            youtubeBackground.style.display = "block";
+            youtubeBackground.style.opacity = "1";
             
             const body = document.body;
             body.style.backgroundColor = "transparent";
