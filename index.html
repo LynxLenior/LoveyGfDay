@@ -32,7 +32,7 @@
             width: 100vw;
             height: 100vh;
         }
-
+        
         .LButton {
             display: flex;
             height: 80px;
@@ -264,78 +264,76 @@
     <div class="message" id="message"></div>
 
     <script>
-    let Grad = false;
-    let envelopeOpened = false;
-    let letterZoomed = false;
-    let hasBeenClicked = false;
+        let Grad = false;
+        let envelopeOpened = false;
+        let letterZoomed = false;
+        let hasBeenClicked = false;
 
-    function Changed(button) {
-        const clickSound = document.getElementById("clickSound");
-        if (clickSound) {
-            clickSound.currentTime = 0;
-            clickSound.volume = 0.4;
-            clickSound.play();
+        function Changed(button) {
+            const clickSound = document.getElementById("clickSound");
+            if (clickSound) {
+                clickSound.currentTime = 0;
+                clickSound.volume = 0.4;
+                clickSound.play();
+            }
+
+            if (hasBeenClicked) return;
+            if (button.disabled) return;
+
+            button.disabled = true;
+            setTimeout(() => button.disabled = false, 3000);
+
+            if (!Grad) {
+                document.body.style.backgroundColor = "white";
+                setTimeout(() => {
+                    document.getElementById("envWrapper").classList.add("show");
+                    const popSound = document.getElementById("popSound");
+                    if (popSound) {
+                        popSound.volume = 0.4;
+                        popSound.play();
+                    }
+                }, 3000);
+            }
+
+            Grad = !Grad;
+            hasBeenClicked = true;
         }
 
-        if (hasBeenClicked) return;
-        if (button.disabled) return;
-
-        button.disabled = true;
-        setTimeout(() => button.disabled = false, 3000);
-
-        if (!Grad) {
-            document.body.style.backgroundColor = "white";
-            setTimeout(() => {
-                document.getElementById("envWrapper").classList.add("show");
+        function openEnvelope() {
+            if (!envelopeOpened) {
+                document.getElementById("flowers").classList.add("show");
+                document.getElementById("letter").classList.add("show");
+                document.getElementById("envelope").classList.add("open-flap");
                 
-                const popSound = document.getElementById("popSound");
-                if (popSound) {
-                    popSound.volume = 0.4;
-                    popSound.play();
-                }
-            }, 3000);
+                const youtubeBackground = document.getElementById("youtube-background");
+                youtubeBackground.style.display = "block";
+                youtubeBackground.style.opacity = "1";
+                
+                const body = document.body;
+                body.style.backgroundColor = "transparent";
+
+                envelopeOpened = true;
+            }
         }
 
-        Grad = !Grad;
-        hasBeenClicked = true;
-    }
+        function revealMessage(e) {
+            e.stopPropagation();
+            const letter = document.getElementById("letter");
 
-    function openEnvelope() {
-        if (!envelopeOpened) {
-            document.getElementById("flowers").classList.add("show");
-            document.getElementById("letter").classList.add("show");
-            document.getElementById("envelope").classList.add("open-flap");
-            
-            // This code makes the video visible
-            const youtubeBackground = document.getElementById("youtube-background");
-            youtubeBackground.style.display = "block";
-            youtubeBackground.style.opacity = "1";
-            
-            const body = document.body;
-            body.style.backgroundColor = "transparent";
+            if (!letterZoomed) {
+                letter.classList.add("zoom");
+                setTimeout(() => {
+                    document.getElementById("message").classList.add("show");
+                }, 600);
+                letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
+            } else {
+                letter.classList.remove("zoom");
+                document.getElementById("message").classList.remove("show");
+                letter.innerHTML = "Click to reveal message";
+            }
 
-            envelopeOpened = true;
+            letterZoomed = !letterZoomed;
         }
-    }
-
-    function revealMessage(e) {
-        e.stopPropagation();
-        const letter = document.getElementById("letter");
-
-        if (!letterZoomed) {
-            letter.classList.add("zoom");
-            setTimeout(() => {
-                document.getElementById("message").classList.add("show");
-            }, 600);
-            letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
-        } else {
-            letter.classList.remove("zoom");
-            document.getElementById("message").classList.remove("show");
-            letter.innerHTML = "Click to reveal message";
-        }
-
-        letterZoomed = !letterZoomed;
-    }
-</script>
+    </script>
 </body>
 </html>
