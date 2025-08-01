@@ -264,76 +264,80 @@
     <div class="message" id="message"></div>
 
     <script>
-        let Grad = false;
-        let envelopeOpened = false;
-        let letterZoomed = false;
-        let hasBeenClicked = false;
+    let Grad = false;
+    let envelopeOpened = false;
+    let letterZoomed = false;
+    let hasBeenClicked = false;
 
-        function Changed(button) {
-            const clickSound = document.getElementById("clickSound");
-            if (clickSound) {
-                clickSound.currentTime = 0;
-                clickSound.volume = 0.4;
-                clickSound.play();
-            }
-
-            if (hasBeenClicked) return;
-            if (button.disabled) return;
-
-            button.disabled = true;
-            setTimeout(() => button.disabled = false, 3000);
-
-            if (!Grad) {
-                document.body.style.backgroundColor = "white";
-                setTimeout(() => {
-                    document.getElementById("envWrapper").classList.add("show");
-                    const popSound = document.getElementById("popSound");
-                    if (popSound) {
-                        popSound.volume = 0.4;
-                        popSound.play();
-                    }
-                }, 3000);
-            }
-
-            Grad = !Grad;
-            hasBeenClicked = true;
+    function Changed(button) {
+        const clickSound = document.getElementById("clickSound");
+        if (clickSound) {
+            clickSound.currentTime = 0;
+            clickSound.volume = 0.4;
+            clickSound.play();
         }
 
-        function openEnvelope() {
-            if (!envelopeOpened) {
-                document.getElementById("flowers").classList.add("show");
-                document.getElementById("letter").classList.add("show");
-                document.getElementById("envelope").classList.add("open-flap");
+        if (hasBeenClicked) return;
+        if (button.disabled) return;
+
+        button.disabled = true;
+        setTimeout(() => button.disabled = false, 3000);
+
+        if (!Grad) {
+            document.body.style.backgroundColor = "white";
+            setTimeout(() => {
+                document.getElementById("envWrapper").classList.add("show");
                 
+                // NEW: Show the YouTube video on button press
                 const youtubeBackground = document.getElementById("youtube-background");
                 youtubeBackground.style.display = "block";
                 youtubeBackground.style.opacity = "1";
                 
-                const body = document.body;
-                body.style.backgroundColor = "transparent";
-
-                envelopeOpened = true;
-            }
+                const popSound = document.getElementById("popSound");
+                if (popSound) {
+                    popSound.volume = 0.4;
+                    popSound.play();
+                }
+            }, 3000);
         }
 
-        function revealMessage(e) {
-            e.stopPropagation();
-            const letter = document.getElementById("letter");
+        Grad = !Grad;
+        hasBeenClicked = true;
+    }
 
-            if (!letterZoomed) {
-                letter.classList.add("zoom");
-                setTimeout(() => {
-                    document.getElementById("message").classList.add("show");
-                }, 600);
-                letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
-            } else {
-                letter.classList.remove("zoom");
-                document.getElementById("message").classList.remove("show");
-                letter.innerHTML = "Click to reveal message";
-            }
+    function openEnvelope() {
+        if (!envelopeOpened) {
+            document.getElementById("flowers").classList.add("show");
+            document.getElementById("letter").classList.add("show");
+            document.getElementById("envelope").classList.add("open-flap");
+            
+            // This code has been moved to the Changed() function
+            
+            const body = document.body;
+            body.style.backgroundColor = "transparent";
 
-            letterZoomed = !letterZoomed;
+            envelopeOpened = true;
         }
-    </script>
+    }
+
+    function revealMessage(e) {
+        e.stopPropagation();
+        const letter = document.getElementById("letter");
+
+        if (!letterZoomed) {
+            letter.classList.add("zoom");
+            setTimeout(() => {
+                document.getElementById("message").classList.add("show");
+            }, 600);
+            letter.innerHTML = "     YOU CLICKED ME!\n\nScroll down for surprise ↓";
+        } else {
+            letter.classList.remove("zoom");
+            document.getElementById("message").classList.remove("show");
+            letter.innerHTML = "Click to reveal message";
+        }
+
+        letterZoomed = !letterZoomed;
+    }
+</script>
 </body>
 </html>
