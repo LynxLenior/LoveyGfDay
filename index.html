@@ -16,8 +16,10 @@
 
         #youtube-background {
             position: fixed;
-            width: 100%;
-            height: 100%;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 100vh;
             transform: translate(-50%, -50%);
             z-index: -1;
             pointer-events: none;
@@ -162,12 +164,12 @@
 <body>
     <div id="youtube-background">
         <iframe src="https://www.youtube.com/embed/dMoIJeQIyeA?autoplay=1&loop=1&playlist=dMoIJeQIyeA&mute=0"
-        title="YouTube video player"
-        frameborder="0"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy="strict-origin-when-cross-origin"
-        allowfullscreen>
-</iframe>
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerpolicy="strict-origin-when-cross-origin"
+                allowfullscreen>
+        </iframe>
     </div>
     
     <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
@@ -179,7 +181,7 @@
 
     <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
         <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
-        <div class="envelope" id="envelope">  </div>
+        <div class="envelope" id="envelope"></div>
     </div>
     <div class="message" id="message"></div>
 
@@ -221,7 +223,7 @@
 
         function openEnvelope() {
             if (!envelopeOpened) {
-                document.getElementById("flowers").classList.add("show");
+                // This line has been removed because you took out the flowers
                 document.getElementById("letter").classList.add("show");
                 document.getElementById("envelope").classList.add("open-flap");
                 
