@@ -213,16 +213,8 @@
     </style>
 </head>
 <body>
-    <div id="youtube-background">
-        <iframe id="youtube-iframe" src="https://www.youtube.com/embed/dMoIJeQIyeA?autoplay=1&loop=1&playlist=dMoIJeQIyeA&mute=0"
-                title="YouTube video player"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allowfullscreen>
-        </iframe>
-    </div>
-    
+    <div id="youtube-background"></div>
+
     <audio id="popSound" src="Sounded.mp3" preload="auto"></audio>
     <audio id="clickSound" src="click.mp3" preload="auto"></audio>
 
@@ -234,33 +226,16 @@
         <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
         <div class="envelope" id="envelope">
             <div class="flowers" id="flowers">
-                <div class="flower">
-                    <div class="petal"></div>
-                    <div class="stem"></div>
-                </div>
-                <div class="flower yellow">
-                    <div class="petal"></div>
-                    <div class="stem"></div>
-                </div>
-                <div class="flower blue">
-                    <div class="petal"></div>
-                    <div class="stem"></div>
-                </div>
-                <div class="flower">
-                    <div class="petal"></div>
-                    <div class="stem"></div>
-                </div>
-                <div class="flower yellow">
-                    <div class="petal"></div>
-                    <div class="stem"></div>
-                </div>
-                <div class="flower blue">
-                    <div class="petal"></div>
-                    <div class="stem"></div>
-                </div>
+                <div class="flower"><div class="petal"></div><div class="stem"></div></div>
+                <div class="flower yellow"><div class="petal"></div><div class="stem"></div></div>
+                <div class="flower blue"><div class="petal"></div><div class="stem"></div></div>
+                <div class="flower"><div class="petal"></div><div class="stem"></div></div>
+                <div class="flower yellow"><div class="petal"></div><div class="stem"></div></div>
+                <div class="flower blue"><div class="petal"></div><div class="stem"></div></div>
             </div>
         </div>
     </div>
+
     <div class="message" id="message"></div>
 
     <script>
@@ -304,18 +279,12 @@
                 document.getElementById("flowers").classList.add("show");
                 document.getElementById("letter").classList.add("show");
                 document.getElementById("envelope").classList.add("open-flap");
-                
-                // Show the video and load the autoplay parameters
-                const youtubeBackground = document.getElementById("youtube-background");
-                const youtubeIframe = document.getElementById("youtube-iframe");
-                
-                youtubeIframe.src = 'https://www.youtube.com/watch?v=dFUugAGtQiM06';
+                document.body.style.backgroundColor = "transparent";
 
+                const youtubeBackground = document.getElementById("youtube-background");
+                youtubeBackground.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/dMoIJeQIyeA?autoplay=1&loop=1&playlist=dMoIJeQIyeA&mute=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                 youtubeBackground.style.display = "block";
                 youtubeBackground.style.opacity = "1";
-                
-                const body = document.body;
-                body.style.backgroundColor = "transparent";
 
                 envelopeOpened = true;
             }
@@ -324,7 +293,6 @@
         function revealMessage(e) {
             e.stopPropagation();
             const letter = document.getElementById("letter");
-
             if (!letterZoomed) {
                 letter.classList.add("zoom");
                 setTimeout(() => {
@@ -336,7 +304,6 @@
                 document.getElementById("message").classList.remove("show");
                 letter.innerHTML = "Click to reveal message";
             }
-
             letterZoomed = !letterZoomed;
         }
     </script>
