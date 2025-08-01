@@ -224,16 +224,21 @@
 
         .heart {
             position: absolute;
-            width: 20px;
-            height: 20px;
-            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 32 29.6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23ff69b4' d='M23.6,0c-3.4,0-6.4,2.6-7.6,4.7C14.8,2.6,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,16,21.2,16,21.2s16-11.8,16-21.2C32,3.8,28.2,0,23.6,0z'/%3E%3C/svg%3E") no-repeat center center;
-            background-size: contain;
-            animation: fall 5s linear infinite;
+            width: 30px;
+            height: 30px;
+            background: url("heart.png") no-repeat center center;
+            background-size: cover;
+            animation: fall 6s linear infinite, rotate 4s linear infinite;
         }
 
         @keyframes fall {
             0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -293,6 +298,7 @@
                         popSound.volume = 0.4;
                         popSound.play();
                     }
+                    showHeartsIfWhiteBg();
                 }, 3000);
             }
 
@@ -336,18 +342,31 @@
 
         function generateHearts() {
             const container = document.getElementById("hearts-container");
+            container.innerHTML = "";
             for (let i = 0; i < 30; i++) {
                 const heart = document.createElement("div");
                 heart.className = "heart";
-                heart.style.left = `${Math.random() * 100}vw`;
-                heart.style.animationDuration = `${3 + Math.random() * 5}s`;
+                const side = Math.random() < 0.5 ? Math.random() * 15 : 85 + Math.random() * 15;
+                heart.style.left = `${side}vw`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                heart.style.width = `${20 + Math.random() * 20}px`;
+                heart.style.height = heart.style.width;
                 container.appendChild(heart);
-
-                setTimeout(() => {
-                    container.removeChild(heart);
-                }, 8000);
             }
         }
+
+        function showHeartsIfWhiteBg() {
+            const bgColor = window.getComputedStyle(document.body).backgroundColor;
+            const container = document.getElementById("hearts-container");
+            if (bgColor === "rgb(255, 255, 255)") {
+                generateHearts();
+                container.style.display = "block";
+            } else {
+                container.style.display = "none";
+            }
+        }
+
+        setInterval(showHeartsIfWhiteBg, 1000);
     </script>
 </body>
 </html>
