@@ -227,18 +227,13 @@
             width: 30px;
             height: 30px;
             background: url("heart.png") no-repeat center center;
-            background-size: cover;
-            animation: fall 6s linear infinite, rotate 4s linear infinite;
+            background-size: contain;
+            animation: fallRotate linear infinite;
         }
 
-        @keyframes fall {
-            0% { transform: translateY(-50px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes fallRotate {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
@@ -291,6 +286,7 @@
 
             if (!Grad) {
                 document.body.style.backgroundColor = "white";
+                startFallingHearts();
                 setTimeout(() => {
                     document.getElementById("envWrapper").classList.add("show");
                     const popSound = document.getElementById("popSound");
@@ -298,7 +294,6 @@
                         popSound.volume = 0.4;
                         popSound.play();
                     }
-                    showHeartsIfWhiteBg();
                 }, 3000);
             }
 
@@ -318,7 +313,6 @@
                 youtubeBackground.style.display = "block";
                 youtubeBackground.style.opacity = "1";
 
-                generateHearts();
                 envelopeOpened = true;
             }
         }
@@ -340,33 +334,20 @@
             letterZoomed = !letterZoomed;
         }
 
-        function generateHearts() {
+        function startFallingHearts() {
             const container = document.getElementById("hearts-container");
-            container.innerHTML = "";
-            for (let i = 0; i < 30; i++) {
+            setInterval(() => {
                 const heart = document.createElement("div");
                 heart.className = "heart";
-                const side = Math.random() < 0.5 ? Math.random() * 15 : 85 + Math.random() * 15;
-                heart.style.left = `${side}vw`;
-                heart.style.animationDelay = `${Math.random() * 5}s`;
-                heart.style.width = `${20 + Math.random() * 20}px`;
-                heart.style.height = heart.style.width;
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${5 + Math.random() * 5}s`;
                 container.appendChild(heart);
-            }
-        }
 
-        function showHeartsIfWhiteBg() {
-            const bgColor = window.getComputedStyle(document.body).backgroundColor;
-            const container = document.getElementById("hearts-container");
-            if (bgColor === "rgb(255, 255, 255)") {
-                generateHearts();
-                container.style.display = "block";
-            } else {
-                container.style.display = "none";
-            }
+                setTimeout(() => {
+                    heart.remove();
+                }, 10000);
+            }, 400);
         }
-
-        setInterval(showHeartsIfWhiteBg, 1000);
     </script>
 </body>
 </html>
