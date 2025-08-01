@@ -111,7 +111,7 @@
         .letter {
             position: absolute;
             width: 180px;
-            height: 80px;
+            height: 270px;
             background: white;
             border: 1px solid #ccc;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
@@ -151,7 +151,7 @@
             text-indent: 2em;
             line-height: 1.6;
             padding: 10px;
-            font-size: 14px;
+            font-size: 9px;
             white-space: pre-line;
         }
 
@@ -214,7 +214,6 @@
     <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
         <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
         <div class="envelope" id="envelope">
-            <!-- Flowers removed -->
         </div>
     </div>
 
@@ -230,7 +229,7 @@
             const clickSound = document.getElementById("clickSound");
             if (clickSound) {
                 clickSound.currentTime = 0;
-                clickSound.volume = 0.4;
+                clickSound.volume = 0.8;
                 clickSound.play();
             }
 
@@ -299,7 +298,7 @@
     } else {
         letter.classList.remove("zoom");
         document.getElementById("message").classList.remove("show");
-        letter.innerHTML = `<div class="centered-text">Click to reveal message</div>`;
+        letter.innerHTML = `<div class="centered-text">Click to reveal message (You can spam the button btw (⁠ㆁ⁠ω⁠ㆁ⁠))</div>`;
     }
     letterZoomed = !letterZoomed;
 }
