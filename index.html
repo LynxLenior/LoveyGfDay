@@ -272,11 +272,14 @@
         function playBucketSound() {
             const sound = document.getElementById("bucketSound");
             if (sound) {
-                sound.volume = 1.5;  // 150%
+                sound.volume = 1.0;  // browsers max out at 1.0 (100%)
                 sound.currentTime = 0;
-                sound.play();
+                sound.play().catch(err => {
+                    console.log("Playback failed:", err);
+                });
             }
         }
+
 
         function openEnvelope() {
             if (!envelopeOpened) {
