@@ -201,6 +201,11 @@
     </style>
 </head>
 <body>
+    <audio id="bucketSound" src="Bucket.mp3" preload="auto"></audio>
+    <img id="bucketImage" src="realBucket.webp" 
+        style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 101;" 
+        onclick="playBucketSound()" />
+
     <div id="youtube-background"></div>
     <div class="hearts-container" id="hearts-container"></div>
 
@@ -256,6 +261,15 @@
             hasBeenClicked = true;
         }
 
+        function playBucketSound() {
+            const sound = document.getElementById("bucketSound");
+            if (sound) {
+                sound.currentTime = 0;
+                sound.play();
+            }
+        }
+
+
         function openEnvelope() {
             if (!envelopeOpened) {
                 // Flowers removed
@@ -289,12 +303,17 @@
             document.getElementById("message").classList.add("show");
         }, 600);
         letter.innerHTML = `
+            <img id="bucketImage" src="realBucket.webp"
+                style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 101;"
+                onclick="playBucketSound()" />
+            <audio id="bucketSound" src="Bucket.mp3" preload="auto"></audio>
             <div class="letter-text">
                 To my dearest Love,<br><br>
                 &emsp;&emsp;It's been a few months ever since we have been officially together, and I know I haven't been the best boyfriend to you, but I do want you to know, I really put my effort for us because I'm deeply in love with you. The days spent, the hours, the minutes, and the seconds with you are something I want to keep going back to, but I would rather make more memories with you, than stay in a place where we have already been through. I love you baby, I always will love you. mwamwamwa<br><br>
                 sincerely,<br>Your beloved Dig player.
             </div>
         `;
+
     } else {
         letter.classList.remove("zoom");
         document.getElementById("message").classList.remove("show");
@@ -319,4 +338,4 @@
         }
     </script>
 </body>
-</html>
+</html>>
