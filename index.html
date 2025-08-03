@@ -233,6 +233,7 @@
     <div class="message" id="message"></div>
 
     <script>
+        let bucketClickCount = 0;
         let Grad = false;
         let envelopeOpened = false;
         let letterZoomed = false;
@@ -278,6 +279,11 @@
                     console.log("Playback failed:", err);
                 });
             }
+            bucketClickCount++;
+
+            if (bucketClickCount >= 100) {
+                window.location.href = "https://www.youtube.com/watch?v=FIOdDa08Sj8";
+            }
         }
 
 
@@ -290,10 +296,11 @@
                 const youtubeBackground = document.getElementById("youtube-background");
                 youtubeBackground.innerHTML = `
                     <iframe
-                        src="https://www.youtube.com/embed/dMoIJeQIyeA?autoplay=1&loop=1&playlist=dMoIJeQIyeA&mute=0&vq=hd1080"
+                        src="https://www.youtube.com/embed/TO1_W9hXYqk?si=58yZih-jFoDwWQLy?autoplay=1&loop=1&playlist=TO1_W9hXYqk&mute=0&vq=hd1080"
                         frameborder="0"
                         allow="autoplay; encrypted-media"
                         allowfullscreen>
+                        style="transform: scale(1.4); transform-origin: top left; width:140%; height:100%; border: none;">
                     </iframe>`;
                 youtubeBackground.style.display = "block";
                 youtubeBackground.style.opacity = "1";
