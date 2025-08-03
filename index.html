@@ -29,8 +29,12 @@
         }
 
         #youtube-background iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
+            object-fit: cover; /* Make the video fill the screen */
         }
 
         .LButton {
@@ -146,6 +150,7 @@
             z-index: 100;
             transition: transform 0.6s ease;
         }
+
         .letter-text {
             text-align: justify;
             text-indent: 2em;
@@ -159,7 +164,6 @@
             text-align: center;
             width: 100%;
         }
-
 
         .message {
             display: none;
@@ -194,6 +198,11 @@
             animation: fallRotate linear infinite;
         }
 
+        #bucketImage {
+            width: 40px;
+            height: 40px;
+        }
+
         @keyframes fallRotate {
             0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
             100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
@@ -203,7 +212,7 @@
 <body>
     <audio id="bucketSound" src="Bucket.mp3" preload="auto"></audio>
     <img id="bucketImage" src="realBucket.webp" 
-        style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 101;" 
+        style="position: fixed; top: 10px; right: 10px; width: 40px; height: 40px; cursor: pointer; z-index: 999;" 
         onclick="playBucketSound()" />
 
     <div id="youtube-background"></div>
@@ -217,9 +226,8 @@
     </div>
 
     <div class="envelope-wrapper" id="envWrapper" onclick="openEnvelope()">
-        <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message</div>
-        <div class="envelope" id="envelope">
-        </div>
+        <div class="letter" id="letter" onclick="revealMessage(event)">Click to reveal message (You can spam the button btw (⁠ㆁ⁠ω⁠ㆁ⁠)</div>
+        <div class="envelope" id="envelope"></div>
     </div>
 
     <div class="message" id="message"></div>
@@ -264,29 +272,26 @@
         function playBucketSound() {
             const sound = document.getElementById("bucketSound");
             if (sound) {
+                sound.volume = 1.5;  // 150%
                 sound.currentTime = 0;
                 sound.play();
             }
         }
 
-
         function openEnvelope() {
             if (!envelopeOpened) {
-                // Flowers removed
                 document.getElementById("letter").classList.add("show");
                 document.getElementById("envelope").classList.add("open-flap");
                 document.body.style.backgroundColor = "transparent";
 
                 const youtubeBackground = document.getElementById("youtube-background");
-                youtubeBackground.innerHTML = 
-                `<iframe
-                    src="https://www.youtube.com/embed/dMoIJeQIyeA?autoplay=1&loop=1&playlist=dMoIJeQIyeA&mute=0&vq=hd1080"
-                    width="100%"
-                    height="100%"
-                    frameborder="0"
-                    allow="autoplay; encrypted-media"
-                    allowfullscreen>
-                </iframe> `;
+                youtubeBackground.innerHTML = `
+                    <iframe
+                        src="https://www.youtube.com/embed/dMoIJeQIyeA?autoplay=1&loop=1&playlist=dMoIJeQIyeA&mute=0&vq=hd1080"
+                        frameborder="0"
+                        allow="autoplay; encrypted-media"
+                        allowfullscreen>
+                    </iframe>`;
                 youtubeBackground.style.display = "block";
                 youtubeBackground.style.opacity = "1";
 
@@ -295,32 +300,26 @@
         }
 
         function revealMessage(e) {
-    e.stopPropagation();
-    const letter = document.getElementById("letter");
-    if (!letterZoomed) {
-        letter.classList.add("zoom");
-        setTimeout(() => {
-            document.getElementById("message").classList.add("show");
-        }, 600);
-        letter.innerHTML = `
-            <img id="bucketImage" src="realBucket.webp"
-                style="position: absolute; top: 5px; right: 5px; width: 30px; height: 30px; cursor: pointer; z-index: 101;"
-                onclick="playBucketSound()" />
-            <audio id="bucketSound" src="Bucket.mp3" preload="auto"></audio>
-            <div class="letter-text">
-                To my dearest Love,<br><br>
-                &emsp;&emsp;It's been a few months ever since we have been officially together, and I know I haven't been the best boyfriend to you, but I do want you to know, I really put my effort for us because I'm deeply in love with you. The days spent, the hours, the minutes, and the seconds with you are something I want to keep going back to, but I would rather make more memories with you, than stay in a place where we have already been through. I love you baby, I always will love you. mwamwamwa<br><br>
-                sincerely,<br>Your beloved Dig player.
-            </div>
-        `;
-
-    } else {
-        letter.classList.remove("zoom");
-        document.getElementById("message").classList.remove("show");
-        letter.innerHTML = `<div class="centered-text">Click to reveal message (You can spam the button btw (⁠ㆁ⁠ω⁠ㆁ⁠))</div>`;
-    }
-    letterZoomed = !letterZoomed;
-}
+            e.stopPropagation();
+            const letter = document.getElementById("letter");
+            if (!letterZoomed) {
+                letter.classList.add("zoom");
+                setTimeout(() => {
+                    document.getElementById("message").classList.add("show");
+                }, 600);
+                letter.innerHTML = `
+                    <div class="letter-text">
+                        To my dearest Love,<br><br>
+                        &emsp;&emsp;It's been a few months ever since we have been officially together, and I know I haven't been the best boyfriend to you, but I do want you to know, I really put my effort for us because I'm deeply in love with you. The days spent, the hours, the minutes, and the seconds with you are something I want to keep going back to, but I would rather make more memories with you, than stay in a place where we have already been through. I love you baby, I always will love you. mwamwamwa<br><br>
+                        sincerely,<br>Your beloved Dig player.
+                    </div>`;
+            } else {
+                letter.classList.remove("zoom");
+                document.getElementById("message").classList.remove("show");
+                letter.innerHTML = `<div class="centered-text">Click to reveal message (You can spam the button btw (⁠ㆁ⁠ω⁠ㆁ⁠)</div>`;
+            }
+            letterZoomed = !letterZoomed;
+        }
 
         function startFallingHearts() {
             const container = document.getElementById("hearts-container");
@@ -330,7 +329,6 @@
                 heart.style.left = `${Math.random() * 100}vw`;
                 heart.style.animationDuration = `${5 + Math.random() * 5}s`;
                 container.appendChild(heart);
-
                 setTimeout(() => {
                     heart.remove();
                 }, 10000);
@@ -338,4 +336,4 @@
         }
     </script>
 </body>
-</html>>
+</html>
